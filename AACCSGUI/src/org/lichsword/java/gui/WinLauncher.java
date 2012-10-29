@@ -18,8 +18,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
+import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -50,6 +53,10 @@ import org.lichsword.java.gui.dialog.GetWebsiteSourceDialog.Listener;
 import org.lichsword.java.jdbc.sqlite.SqliteColumn;
 import org.lichsword.java.jdbc.sqlite.SqliteDBContext;
 import org.lichsword.java.jdbc.sqlite.SqliteTable;
+
+import sun.net.www.content.audio.x_aiff;
+
+import javax.swing.JScrollBar;
 
 public class WinLauncher extends JFrame implements ActionListener {
 
@@ -194,18 +201,45 @@ public class WinLauncher extends JFrame implements ActionListener {
 		gbc_panelTable.gridy = 0;
 		getContentPane().add(panelTable);
 		table = new JTable();
-		// currentTableModel = new DefaultTableModel();
-		// table.setModel(currentTableModel);
 		JTableHeader jth = table.getTableHeader();
-		panelTable.setLayout(new BoxLayout(panelTable, BoxLayout.X_AXIS));
+		panelTable.setLayout(new BorderLayout(0, 0));
 		panelTableDetail = new JPanel();
 		panelTable.add(panelTableDetail);
 		panelTableDetail.setLayout(new BorderLayout(0, 0));
 		panelTableDetail.add(jth, BorderLayout.NORTH);
 		panelTableDetail.add(table, BorderLayout.CENTER);
 
-		JLabel lblListState = new JLabel("list state");
-		panelTableDetail.add(lblListState, BorderLayout.SOUTH);
+		VSB = new JScrollBar();
+		VSB.addAdjustmentListener(sbAdjustmentValueChangeListener);
+		panelTable.add(VSB, BorderLayout.EAST);
+
+		HSB = new JScrollBar();
+		panelTable.add(HSB, BorderLayout.SOUTH);
+		HSB.setOrientation(JScrollBar.HORIZONTAL);
+		HSB.addAdjustmentListener(sbAdjustmentValueChangeListener);
+	}
+
+	private JScrollBar VSB;
+	private JScrollBar HSB;
+
+	private SBAdjustmentValueChangeListener sbAdjustmentValueChangeListener = new SBAdjustmentValueChangeListener();
+
+	int x;
+	int y;
+
+	private class SBAdjustmentValueChangeListener implements AdjustmentListener {
+
+		@Override
+		public void adjustmentValueChanged(AdjustmentEvent e) {
+			JScrollBar sb = (JScrollBar) e.getSource();
+			if (sb.getOrientation() == JScrollBar.HORIZONTAL) {
+				x = sb.getValue();
+			} else {
+				y = sb.getValue();
+			}
+			panelTableDetail.setLocation(-x, -y);
+		}
+
 	}
 
 	void doTreeOnMouseClicked(MouseEvent me) {
@@ -234,7 +268,9 @@ public class WinLauncher extends JFrame implements ActionListener {
 				}// end if
 
 				this.table.setModel(tableModel);
-
+				HSB.setMinimum(0);
+				HSB.setMaximum(this.table.getWidth());
+				
 				int rowcount = tableModel.getRowCount();
 				if (0 == rowcount) {
 					// first load
