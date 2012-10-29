@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GoogleReaderApplication</string>
+    <string name="hint_gmail">Gmail</string>
+    <string name="hint_password">password</string>
+    <string name="sign_in">Sign in</string>
+    
+    <string name="gmail_mine">lichswordkernel@gmail.com</string>
+    <string name="password_mine">blizzardnaruto</string>
+    
+    <string name="msg_Log_in">Logging on to server, please wait...</string>
+    
+    <string name="msg_login_failed"></string>
+    
+    <string name="confirm">Confirm</string>	
+</resources>

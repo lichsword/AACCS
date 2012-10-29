@@ -1,0 +1,329 @@
+/******************************************************************************
+ *
+ * Copyright 2012 Lichsword Studio, All right reserved.
+ *
+ * File name   : WinLauncher.java
+ * Create time : 2012-10-27
+ * Author      : lichsword
+ * Description : TODO
+ *
+ *****************************************************************************/
+package org.lichsword.java.gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import org.lichsword.java.gui.dialog.GetWebsiteSourceDialog;
+import org.lichsword.java.gui.dialog.GetWebsiteSourceDialog.Listener;
+import org.lichsword.java.jdbc.sqlite.SqliteColumn;
+import org.lichsword.java.jdbc.sqlite.SqliteDBContext;
+import org.lichsword.java.jdbc.sqlite.SqliteTable;
+
+public class WinLauncher extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 6215327146471051272L;
+
+	/**
+	 * Launch the application
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				WinLauncher frame = new WinLauncher();
+				frame.setVisible(true);
+			}
+		});
+	}
+
+	/**
+	 * Constructor
+	 */
+	public WinLauncher() throws HeadlessException {
+		initFrameParam();
+		initContentView();
+	}
+
+	private void initFrameParam() {
+		setTitle("AACCS-GUI");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 772, 600);
+	}
+
+	private final String MENU_NAME_FILE = "File";
+	private final String MENU_NAME_TOOL = "Tool";
+	private final String MENU_ITEM_NAME_GET_WEBSITE_SOURCE = "Get site code";
+	private final String MENU_ITEM_NAME_REGULAR_TEST = "Regular Test";
+	private final String MENU_ITEM_NAME_OPEN = "Open";
+	private final String MENU_ITEM_NAME_EXIT = "Exit";
+
+	//
+	private JPanel panelDatabase;
+	private JTree treeDatabase;
+
+	//
+
+	private void initContentView() {
+		initMenutBar();
+		initTreeLayout();
+		initTableLayout();
+	}
+
+	private void initMenutBar() {
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu menuFile = new JMenu(MENU_NAME_FILE);
+		menuFile.setMnemonic(KeyEvent.VK_F);
+		menuBar.add(menuFile);
+
+		JMenuItem menuItemOpen = new JMenuItem(MENU_ITEM_NAME_OPEN);
+		menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
+				InputEvent.CTRL_DOWN_MASK));
+		menuItemOpen.addActionListener(this);
+		menuItemOpen.setIcon(new ImageIcon(WinLauncher.class
+				.getResource("/org/lichsword/java/res/icon/fldr_obj.gif")));
+		menuFile.add(menuItemOpen);
+
+		JMenuItem menuItemExit = new JMenuItem(MENU_ITEM_NAME_EXIT);
+		menuFile.add(menuItemExit);
+
+		JMenu menuTool = new JMenu(MENU_NAME_TOOL);
+		menuTool.setMnemonic(KeyEvent.VK_T);
+		menuBar.add(menuTool);
+
+		JMenuItem menuItem1 = new JMenuItem(MENU_ITEM_NAME_GET_WEBSITE_SOURCE);
+		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		menuItem1.setIcon(new ImageIcon(WinLauncher.class
+				.getResource("/org/lichsword/java/res/icon/lprio_tsk.gif")));
+		menuItem1.addActionListener(this); // 添加侦听
+		menuTool.add(menuItem1);
+
+		JMenuItem menuItem2 = new JMenuItem(MENU_ITEM_NAME_REGULAR_TEST);
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+		menuItem2.setIcon(new ImageIcon(WinLauncher.class
+				.getResource("/org/lichsword/java/res/icon/read_obj.gif")));
+		menuTool.add(menuItem2);
+	}
+
+	//
+	private JPanel panelTableDetail;
+	private JTable table;
+
+	private void initTreeLayout() {
+		JPanel panelContent = new JPanel();
+		GridBagLayout gbl_panelContent = new GridBagLayout();
+		gbl_panelContent.columnWidths = new int[] { 656, 0 };
+		gbl_panelContent.rowHeights = new int[] { 26, 500, 15, 0 };
+		gbl_panelContent.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_panelContent.rowWeights = new double[] { 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		panelContent.setLayout(gbl_panelContent);
+
+		panelDatabase = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panelDatabase.getLayout();
+		flowLayout.setAlignOnBaseline(true);
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		panelDatabase.setVisible(false);
+		panelDatabase.setBorder(new TitledBorder(null, "",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelDatabase.setForeground(new Color(230, 230, 250));
+		panelDatabase.setBackground(new Color(230, 230, 250));
+
+		treeDatabase = new JTree();
+		treeDatabase.setBackground(new Color(230, 230, 250));
+		treeDatabase.setForeground(new Color(230, 230, 250));
+		treeDatabase.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent me) {
+				doTreeOnMouseClicked(me);
+			}
+		});
+		getContentPane().setLayout(
+				new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+
+		panelDatabase.add(treeDatabase);
+		GridBagConstraints gbc_panelDatabase = new GridBagConstraints();
+		gbc_panelDatabase.fill = GridBagConstraints.BOTH;
+		gbc_panelDatabase.insets = new Insets(0, 0, 0, 5);
+		gbc_panelDatabase.gridx = 0;
+		gbc_panelDatabase.gridy = 0;
+		getContentPane().add(panelDatabase);
+	}
+
+	private void initTableLayout() {
+		JPanel panelTable = new JPanel();
+		GridBagConstraints gbc_panelTable = new GridBagConstraints();
+		gbc_panelTable.anchor = GridBagConstraints.NORTH;
+		gbc_panelTable.fill = GridBagConstraints.BOTH;
+		gbc_panelTable.gridx = 1;
+		gbc_panelTable.gridy = 0;
+		getContentPane().add(panelTable);
+		table = new JTable();
+		// currentTableModel = new DefaultTableModel();
+		// table.setModel(currentTableModel);
+		JTableHeader jth = table.getTableHeader();
+		panelTable.setLayout(new BoxLayout(panelTable, BoxLayout.X_AXIS));
+		panelTableDetail = new JPanel();
+		panelTable.add(panelTableDetail);
+		panelTableDetail.setLayout(new BorderLayout(0, 0));
+		panelTableDetail.add(jth, BorderLayout.NORTH);
+		panelTableDetail.add(table, BorderLayout.CENTER);
+
+		JLabel lblListState = new JLabel("list state");
+		panelTableDetail.add(lblListState, BorderLayout.SOUTH);
+	}
+
+	void doTreeOnMouseClicked(MouseEvent me) {
+		TreePath tp = treeDatabase.getPathForLocation(me.getX(), me.getY());
+		if (null != tp) {
+			TreeNode node = (TreeNode) tp.getLastPathComponent();
+			/*
+			 * only leaf is table, the branch is databaes name
+			 */
+			if (null != node && node.isLeaf()) {
+				// System.out.println(tp.toString());
+				String selectedTableName = node.toString();
+				System.out.println(selectedTableName);// test
+
+				SqliteTable table = new SqliteTable(currentSqliteDB,
+						selectedTableName);
+				table.refreshValues();
+
+				DefaultTableModel tableModel = currentSqliteDB
+						.getCachedTableModel(selectedTableName);
+
+				if (null == tableModel) {
+					tableModel = new DefaultTableModel();
+					currentSqliteDB.saveTableModel(selectedTableName,
+							tableModel);
+				}// end if
+
+				this.table.setModel(tableModel);
+
+				int rowcount = tableModel.getRowCount();
+				if (0 == rowcount) {
+					// first load
+					if (null != currentSqliteDB) {
+						ArrayList<SqliteColumn> columns = currentSqliteDB
+								.listColumns(selectedTableName);
+						String[][] ValueStore = table.getValues();
+						for (SqliteColumn column : columns) {
+							tableModel.addColumn(column.getName());
+						}
+
+						for (String[] strings : ValueStore) {
+							tableModel.addRow(strings);
+						}
+					}
+				}// end if
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String name = e.getActionCommand();
+		if (e.getSource() instanceof JMenuItem) {
+			OnMenuClickEvent(name);
+		} else {
+			// TODO
+		}
+	}
+
+	private final String DB_PATH = "dota.db"; // test
+
+	private SqliteDBContext currentSqliteDB;
+
+	private void OnMenuClickEvent(String name) {
+		if (name.equals(MENU_ITEM_NAME_OPEN)) {
+			Thread thread = new Thread() {
+
+				@Override
+				public void run() {
+					SqliteDBContext sqliteDB = new SqliteDBContext();
+					sqliteDB.openDatabse(DB_PATH);
+					ArrayList<String> tableNames = sqliteDB.listTables();
+
+					//
+					DefaultMutableTreeNode root = new DefaultMutableTreeNode(
+							DB_PATH);
+					DefaultTreeModel model = new DefaultTreeModel(root);
+					treeDatabase.setModel(model);
+
+					for (int i = 0; i < tableNames.size(); i++) {
+						System.out.println(tableNames.get(i));
+						DefaultMutableTreeNode tableTree = new DefaultMutableTreeNode(
+								tableNames.get(i));
+						model.insertNodeInto(tableTree, root, i);
+					}
+					treeDatabase.setVisible(true);
+					panelDatabase.setVisible(true);
+					//
+					currentSqliteDB = sqliteDB;
+					super.run();
+				}
+
+			};
+			thread.start();
+
+		} else if (name.equals(MENU_ITEM_NAME_GET_WEBSITE_SOURCE)) {
+			boolean modal = true;// 模态对话框
+			GetWebsiteSourceDialog dialog = new GetWebsiteSourceDialog(modal);
+			dialog.setListener(new GetWebsiteSourceListener());
+			dialog.show();
+		}
+	}
+
+	private class GetWebsiteSourceListener implements Listener {
+
+		@Override
+		public void finishGetWebsiteCode(boolean success, String result) {
+			if (success) {
+				System.out.println(result);
+			}
+
+		}
+	}
+
+}

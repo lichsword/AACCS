@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<EditText android:id="@+id/saveFileNameEditText"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:lines="1" android:layout_toLeftOf="@+id/saveFileNameConfirmButton" />
+	<Button android:id="@+id/saveFileNameConfirmButton"
+		android:layout_width="120dip" android:layout_height="wrap_content"
+		android:layout_alignParentRight="true" android:text="@string/confirm"/>
+	<ListView android:id="@+id/folderList" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_below="@+id/saveFileNameEditText"
+		android:fastScrollEnabled="true" />
+</RelativeLayout>

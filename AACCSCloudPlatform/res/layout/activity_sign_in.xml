@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/GmailEditText" android:hint="@string/hint_gmail" android:text="@string/gmail_mine"/>
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/PasswordEditText" android:hint="@string/hint_password" android:text="@string/password_mine"/>
+	<Button android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:text="@string/sign_in" 
+		android:id="@+id/SignInButton"/>
+</LinearLayout>
