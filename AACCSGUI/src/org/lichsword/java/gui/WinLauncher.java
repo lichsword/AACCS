@@ -18,7 +18,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
-import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
@@ -32,14 +31,15 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -48,15 +48,12 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import org.lichsword.java.gui.dialog.DesignButtonDialog;
 import org.lichsword.java.gui.dialog.GetWebsiteSourceDialog;
 import org.lichsword.java.gui.dialog.GetWebsiteSourceDialog.Listener;
 import org.lichsword.java.jdbc.sqlite.SqliteColumn;
 import org.lichsword.java.jdbc.sqlite.SqliteDBContext;
 import org.lichsword.java.jdbc.sqlite.SqliteTable;
-
-import sun.net.www.content.audio.x_aiff;
-
-import javax.swing.JScrollBar;
 
 public class WinLauncher extends JFrame implements ActionListener {
 
@@ -96,6 +93,8 @@ public class WinLauncher extends JFrame implements ActionListener {
 	private final String MENU_NAME_TOOL = "Tool";
 	private final String MENU_ITEM_NAME_GET_WEBSITE_SOURCE = "Get site code";
 	private final String MENU_ITEM_NAME_REGULAR_TEST = "Regular Test";
+	private final String MENU_ITEM_NAME_BUTTON_DESIGN = "Design Button";
+
 	private final String MENU_ITEM_NAME_OPEN = "Open";
 	private final String MENU_ITEM_NAME_EXIT = "Exit";
 
@@ -114,38 +113,58 @@ public class WinLauncher extends JFrame implements ActionListener {
 	private void initMenutBar() {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-
+		//
 		JMenu menuFile = new JMenu(MENU_NAME_FILE);
+		menuFile.setIcon(new ImageIcon(WinLauncher.class
+				.getResource("/org/lichsword/java/res/icon/database.png")));
 		menuFile.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(menuFile);
-
+		//
 		JMenuItem menuItemOpen = new JMenuItem(MENU_ITEM_NAME_OPEN);
+		menuItemOpen.setMnemonic(KeyEvent.VK_O);
 		menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
 				InputEvent.CTRL_DOWN_MASK));
 		menuItemOpen.addActionListener(this);
 		menuItemOpen.setIcon(new ImageIcon(WinLauncher.class
 				.getResource("/org/lichsword/java/res/icon/fldr_obj.gif")));
 		menuFile.add(menuItemOpen);
-
+		//
 		JMenuItem menuItemExit = new JMenuItem(MENU_ITEM_NAME_EXIT);
 		menuFile.add(menuItemExit);
 
 		JMenu menuTool = new JMenu(MENU_NAME_TOOL);
-		menuTool.setMnemonic(KeyEvent.VK_T);
+		menuTool.setIcon(new ImageIcon(WinLauncher.class
+				.getResource("/org/lichsword/java/res/icon/tool.png")));
+		menuTool.setMnemonic(KeyEvent.VK_F4);
 		menuBar.add(menuTool);
-
-		JMenuItem menuItem1 = new JMenuItem(MENU_ITEM_NAME_GET_WEBSITE_SOURCE);
-		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-		menuItem1.setIcon(new ImageIcon(WinLauncher.class
+		//
+		JMenuItem menuItemGetWebsiteSource = new JMenuItem(
+				MENU_ITEM_NAME_GET_WEBSITE_SOURCE);
+		menuItemGetWebsiteSource.setMnemonic(KeyEvent.VK_G);
+		menuItemGetWebsiteSource.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_F2, 0));
+		menuItemGetWebsiteSource.setIcon(new ImageIcon(WinLauncher.class
 				.getResource("/org/lichsword/java/res/icon/lprio_tsk.gif")));
-		menuItem1.addActionListener(this); // 添加侦听
-		menuTool.add(menuItem1);
-
-		JMenuItem menuItem2 = new JMenuItem(MENU_ITEM_NAME_REGULAR_TEST);
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
-		menuItem2.setIcon(new ImageIcon(WinLauncher.class
+		menuItemGetWebsiteSource.addActionListener(this); // 添加侦听
+		menuTool.add(menuItemGetWebsiteSource);
+		//
+		JMenuItem menuItemRegularTest = new JMenuItem(
+				MENU_ITEM_NAME_REGULAR_TEST);
+		menuItemRegularTest.setMnemonic(KeyEvent.VK_R);
+		menuItemRegularTest.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_F3, 0));
+		menuItemRegularTest.setIcon(new ImageIcon(WinLauncher.class
 				.getResource("/org/lichsword/java/res/icon/read_obj.gif")));
-		menuTool.add(menuItem2);
+		menuTool.add(menuItemRegularTest);
+		menuTool.addSeparator();
+		//
+		JMenuItem menuItemDesignButton = new JMenuItem(
+				MENU_ITEM_NAME_BUTTON_DESIGN);
+		menuItemDesignButton.addActionListener(this); // 添加侦听
+		menuItemDesignButton.setMnemonic(KeyEvent.VK_D);
+		menuItemDesignButton.setIcon(new ImageIcon(WinLauncher.class
+				.getResource("/org/lichsword/java/res/icon/design.png")));
+		menuTool.add(menuItemDesignButton);
 	}
 
 	//
@@ -201,6 +220,17 @@ public class WinLauncher extends JFrame implements ActionListener {
 		gbc_panelTable.gridy = 0;
 		getContentPane().add(panelTable);
 		table = new JTable();
+		table.setFillsViewportHeight(true);
+		table.setColumnSelectionAllowed(true);
+		table.setCellSelectionEnabled(true);
+		// table.addMouseListener(tableOnMouseListener);
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent me) {
+				tableOnMouseListener(me);
+			}
+		});
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
 		JTableHeader jth = table.getTableHeader();
 		panelTable.setLayout(new BorderLayout(0, 0));
 		panelTableDetail = new JPanel();
@@ -211,12 +241,14 @@ public class WinLauncher extends JFrame implements ActionListener {
 
 		VSB = new JScrollBar();
 		VSB.addAdjustmentListener(sbAdjustmentValueChangeListener);
-		panelTable.add(VSB, BorderLayout.EAST);
+		// TODO temp note
+		// panelTable.add(VSB, BorderLayout.EAST);
 
 		HSB = new JScrollBar();
-		panelTable.add(HSB, BorderLayout.SOUTH);
 		HSB.setOrientation(JScrollBar.HORIZONTAL);
 		HSB.addAdjustmentListener(sbAdjustmentValueChangeListener);
+		// TODO temp note
+		// panelTable.add(HSB, BorderLayout.SOUTH);
 	}
 
 	private JScrollBar VSB;
@@ -239,7 +271,17 @@ public class WinLauncher extends JFrame implements ActionListener {
 			}
 			panelTableDetail.setLocation(-x, -y);
 		}
+	}
 
+	private void tableOnMouseListener(MouseEvent me) {
+		System.out.println("double click");
+		int rowIndex = table.getSelectedRow();
+		int columnIndex = table.getSelectedColumn();
+		System.out.println("row = " + rowIndex + "column = " + columnIndex);
+		if (0 == rowIndex) {
+			// special row
+			// TODO
+		}
 	}
 
 	void doTreeOnMouseClicked(MouseEvent me) {
@@ -270,7 +312,7 @@ public class WinLauncher extends JFrame implements ActionListener {
 				this.table.setModel(tableModel);
 				HSB.setMinimum(0);
 				HSB.setMaximum(this.table.getWidth());
-				
+
 				int rowcount = tableModel.getRowCount();
 				if (0 == rowcount) {
 					// first load
@@ -281,6 +323,12 @@ public class WinLauncher extends JFrame implements ActionListener {
 						for (SqliteColumn column : columns) {
 							tableModel.addColumn(column.getName());
 						}
+
+						String[] Filters = new String[columns.size()];
+						for (int i = 0; i < Filters.length; i++) {
+							Filters[i] = "*";
+						}
+						tableModel.addRow(Filters);
 
 						for (String[] strings : ValueStore) {
 							tableModel.addRow(strings);
@@ -347,6 +395,10 @@ public class WinLauncher extends JFrame implements ActionListener {
 			boolean modal = true;// 模态对话框
 			GetWebsiteSourceDialog dialog = new GetWebsiteSourceDialog(modal);
 			dialog.setListener(new GetWebsiteSourceListener());
+			dialog.show();
+		} else if (name.equals(MENU_ITEM_NAME_BUTTON_DESIGN)) {
+			boolean modal = true;// 模态对话框
+			DesignButtonDialog dialog = new DesignButtonDialog(modal);
 			dialog.show();
 		}
 	}
