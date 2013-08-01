@@ -1,5 +1,6 @@
 package org.lichsword.android.ui.designPanels.json;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -35,7 +36,6 @@ public class JSONDesignPanel extends JPanel {
     public JSONDesignPanel() {
         super();
         setBorder(new EmptyBorder(5, 5, 5, 5));
-        setLayout(null);
 
         initContentView();
     }
@@ -80,26 +80,32 @@ public class JSONDesignPanel extends JPanel {
     }
 
     private void initContentView() {
+        setLayout(new BorderLayout(0, 0));
+
+        JPanel panel = new JPanel();
+        add(panel, BorderLayout.PAGE_START);
+        /* add URL text field && RUN button into panel */
+        panel.setLayout(new BorderLayout(0, 0));
         textField = new JTextField();
-        textField.setBounds(16, 6, 412, 28);
-        add(textField);
         textField.setColumns(10);
+        panel.add(textField, BorderLayout.CENTER);
 
-        JButton btnRun = new JButton("Run");
-        btnRun.setBounds(440, 7, 69, 29);
+        JButton btnRun = new JButton();
+        btnRun.setText("Run");
         btnRun.addActionListener(mActionListener);
-        add(btnRun);
+        panel.add(btnRun, BorderLayout.EAST);
 
-        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane = new JTabbedPane();
+        add(tabbedPane, BorderLayout.CENTER);
+
         tabbedPane.addChangeListener(new TabChangeListener());
         textModePanel = new TextModePanel();
-        tabbedPane.addTab("Text", textModePanel);/* first tab */
+        tabbedPane.addTab("Text", textModePanel);
         treeModePanel = new TreeModePanel();
         tabbedPane.addTab("Tree", treeModePanel);/* second tab */
         codeModePanel = new CodeModePanel();
-        tabbedPane.addTab("Code", codeModePanel);/* third tab */
-        tabbedPane.setBounds(26, 45, 483, 284);
-        add(tabbedPane);
+        tabbedPane.addTab("Code", codeModePanel);
+
         tabbedPane.setSelectedIndex(1);
         currentModelPanel = (AbstractModelPanel) tabbedPane
                 .getSelectedComponent();
