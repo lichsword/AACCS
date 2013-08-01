@@ -2,7 +2,6 @@ package org.lichsword.service.json;
 
 import java.util.WeakHashMap;
 
-import org.lichsword.util.LogHelper;
 import org.lichsword.util.TextUtils;
 
 /**
@@ -51,7 +50,7 @@ public class JsonCacheCenter {
 
     public void saveCacheValue(String url, String value) {
         String preValue = cache.put(url.hashCode(), value);
-        LogHelper.v(TAG, "pre value=" + preValue);
+        // LogHelper.v(TAG, "previous value=" + preValue);
     }
 
 }

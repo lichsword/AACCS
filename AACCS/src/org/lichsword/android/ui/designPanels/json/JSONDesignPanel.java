@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.lichsword.service.json.JsonClientService;
 
@@ -18,6 +20,18 @@ public class JSONDesignPanel extends JPanel {
      */
     private static final long serialVersionUID = 3028317657813419800L;
 
+    private JTabbedPane tabbedPane;
+
+    private JTextField textField;
+
+    private AbstractModelPanel currentModelPanel;
+
+    private TextModePanel textModePanel;
+    private TreeModePanel treeModePanel;
+    private CodeModePanel codeModePanel;
+
+    private final ButtonActionListener mActionListener = new ButtonActionListener();
+
     public JSONDesignPanel() {
         super();
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -25,14 +39,6 @@ public class JSONDesignPanel extends JPanel {
 
         initContentView();
     }
-
-    private JTextField textField;
-
-    private TextModePanel textModePanel;
-    private TreeModePanel treeModePanel;
-    private CodeModePanel codeModePanel;
-
-    private final ButtonActionListener mActionListener = new ButtonActionListener();
 
     private class ButtonActionListener implements ActionListener {
 
@@ -57,10 +63,20 @@ public class JSONDesignPanel extends JPanel {
         public void run() {
             String result = JsonClientService.getInstance().retrieveJsonString(
                     url);
-            textModePanel.setText(result);
+            currentModelPanel.setData(result);
             super.run();
         }
 
+    }
+
+    class TabChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+            currentModelPanel = (AbstractModelPanel) tabbedPane
+                    .getSelectedComponent();
+        }
     }
 
     private void initContentView() {
@@ -74,15 +90,18 @@ public class JSONDesignPanel extends JPanel {
         btnRun.addActionListener(mActionListener);
         add(btnRun);
 
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.addChangeListener(new TabChangeListener());
         textModePanel = new TextModePanel();
-        tabbedPane.addTab("Text", textModePanel);
+        tabbedPane.addTab("Text", textModePanel);/* first tab */
         treeModePanel = new TreeModePanel();
-        tabbedPane.addTab("Tree", treeModePanel);
+        tabbedPane.addTab("Tree", treeModePanel);/* second tab */
         codeModePanel = new CodeModePanel();
-        tabbedPane.addTab("Code", codeModePanel);
+        tabbedPane.addTab("Code", codeModePanel);/* third tab */
         tabbedPane.setBounds(26, 45, 483, 284);
         add(tabbedPane);
-        tabbedPane.setSelectedIndex(0);
+        tabbedPane.setSelectedIndex(1);
+        currentModelPanel = (AbstractModelPanel) tabbedPane
+                .getSelectedComponent();
     }
 }

@@ -2,29 +2,29 @@ package org.lichsword.android.ui.designPanels.json;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-public class TextModePanel extends JPanel {
+public class TextModePanel extends AbstractModelPanel {
     /**
      * 
      */
     private static final long serialVersionUID = 7442860224527572676L;
 
+    private JTextArea textArea;
+
     public TextModePanel() {
         super();
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(null);
-
+    
         initContentView();
     }
 
-    private JTextArea textArea;
-
-    public void setText(String text) {
-        textArea.setText(text);
+    @Override
+    public void setData(String jsonString) {
+        textArea.setText(jsonString);
     }
 
     private void initContentView() {

@@ -8,7 +8,7 @@ public class LogHelper {
     private static String TAG = LogHelper.class.getSimpleName();
 
     // TODO 发布前必须手动关闭
-    private static boolean isNeedLog = false;
+    private static boolean isNeedLog = true;
 
     // TODO 发布前必须手动关闭
     private static boolean enableTag = false;
@@ -61,11 +61,11 @@ public class LogHelper {
     public static void i(String tag, String msg) {
         if (enableTag) {
             if (isNeedLog && tags.contains(tag)) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         } else {
             if (isNeedLog) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         }
     }
@@ -73,11 +73,11 @@ public class LogHelper {
     public static void e(String tag, String msg) {
         if (enableTag) {
             if (isNeedLog && tags.contains(tag)) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         } else {
             if (isNeedLog) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         }
     }
@@ -85,11 +85,11 @@ public class LogHelper {
     public static void d(String tag, String msg) {
         if (enableTag) {
             if (isNeedLog && tags.contains(tag)) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         } else {
             if (isNeedLog) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         }
     }
@@ -97,11 +97,11 @@ public class LogHelper {
     public static void w(String tag, String msg) {
         if (enableTag) {
             if (isNeedLog && tags.contains(tag)) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         } else {
             if (isNeedLog) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         }
     }
@@ -110,11 +110,11 @@ public class LogHelper {
         if (enableTag) {
 
             if (isNeedLog && tags.contains(tag)) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         } else {
             if (isNeedLog) {
-                System.out.println(tag + msg);
+                System.out.println(tag + ": " + msg);
             }
         }
     }
