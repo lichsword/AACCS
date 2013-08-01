@@ -10,19 +10,32 @@ public class JsonClientService extends WebClientService {
 
     public static final String TAG = JsonClientService.class.getSimpleName();
 
-    protected JSONObject retrieveJson(String url) throws JSONException {
+    private static JsonClientService sInstance;
+
+    private JsonClientService() {
+        // to do
+    }
+
+    public static JsonClientService getInstance() {
+        if (null == sInstance) {
+            sInstance = new JsonClientService();
+        }// end if
+        return sInstance;
+    }
+
+    public JSONObject retrieveJsonObject(String url) throws JSONException {
         String content = retrieveJsonString(url);
         JSONObject object = new JSONObject(content);
         return object;
     }
 
-    protected JSONArray retrieveJsonArray(String url) throws JSONException {
+    public JSONArray retrieveJsonArray(String url) throws JSONException {
         String content = retrieveJsonString(url);
         JSONArray array = new JSONArray(content);
         return array;
     }
 
-    private String retrieveJsonString(String url) {
+    public String retrieveJsonString(String url) {
         LogHelper.w(TAG, "load url = " + url);
         String content = null;
         JsonCacheCenter center = JsonCacheCenter.getInstance();

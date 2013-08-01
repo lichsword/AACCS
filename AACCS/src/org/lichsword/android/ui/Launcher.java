@@ -29,8 +29,8 @@ import org.lichsword.android.ui.designPanels.ActivityDesignPanel;
 import org.lichsword.android.ui.designPanels.ButtonDesignPanel;
 import org.lichsword.android.ui.designPanels.DatabaseDesignPanel;
 import org.lichsword.android.ui.designPanels.FlowSheetDesignPanel;
-import org.lichsword.android.ui.designPanels.JSONDesignPanel;
 import org.lichsword.android.ui.designPanels.OptionMenuDesignPanel;
+import org.lichsword.android.ui.designPanels.json.JSONDesignPanel;
 
 /**
  * @author yuewang
@@ -165,7 +165,7 @@ public class Launcher extends JFrame {
 
     private final String TAB_NAME_BUTTON = "  Button  ";
 
-    private final String TAB_NAME_JSON = "JSON";
+    private final String TAB_NAME_JSON = "  JSON    ";
 
     private final String TAB_NAME_FLOW_SHEET = "Flow Sheet";
 
