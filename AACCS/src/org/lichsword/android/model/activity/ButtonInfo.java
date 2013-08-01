@@ -2,7 +2,7 @@ package org.lichsword.android.model.activity;
 
 import java.io.File;
 
-import org.lichsword.util.FileUtil;
+import org.lichsword.swt.util.FileUtil;
 
 public class ButtonInfo {
 

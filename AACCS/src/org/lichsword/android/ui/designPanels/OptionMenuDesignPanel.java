@@ -34,7 +34,7 @@ import org.lichsword.android.model.activity.ButtonInfo;
 import org.lichsword.android.model.activity.OptionMenuModel;
 import org.lichsword.android.model.activity.OptionMenuModel.OptionMenuItem;
 import org.lichsword.android.ui.view.advance.DragFileHandler;
-import org.lichsword.util.FileUtil;
+import org.lichsword.swt.util.FileUtil;
 import org.lichsword.util.TipUtil;
 import java.awt.Color;
 import java.io.File;

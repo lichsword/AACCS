@@ -43,7 +43,7 @@ import org.lichsword.android.manager.IconCachedManager;
 import org.lichsword.android.manager.RefactorFileManager;
 import org.lichsword.android.model.activity.ButtonInfo;
 import org.lichsword.android.ui.view.advance.DragFileHandler;
-import org.lichsword.util.FileUtil;
+import org.lichsword.swt.util.FileUtil;
 import org.lichsword.util.TipUtil;
 
 /**

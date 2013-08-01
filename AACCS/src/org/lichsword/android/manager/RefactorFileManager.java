@@ -3,7 +3,7 @@ package org.lichsword.android.manager;
 import java.io.File;
 
 import org.lichsword.android.model.activity.ButtonInfo;
-import org.lichsword.util.FileUtil;
+import org.lichsword.swt.util.FileUtil;
 
 public class RefactorFileManager {
     private static RefactorFileManager sInstance;

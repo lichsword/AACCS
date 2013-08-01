@@ -9,8 +9,8 @@ import javax.swing.ImageIcon;
 import org.lichsword.android.model.activity.ButtonInfo;
 import org.lichsword.android.model.activity.OptionMenuModel;
 import org.lichsword.android.model.activity.OptionMenuModel.OptionMenuItem;
+import org.lichsword.swt.util.FileUtil;
 import org.lichsword.util.ColorUtil;
-import org.lichsword.util.FileUtil;
 import org.lichsword.util.TipUtil;
 
 public class IconCachedManager {
