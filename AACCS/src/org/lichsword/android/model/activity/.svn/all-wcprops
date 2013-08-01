@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/19/trunk/AACCS/src/org/lichsword/android/model/activity
+END
+StateBarModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/9/trunk/AACCS/src/org/lichsword/android/model/activity/StateBarModel.java
+END
+ButtonInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19/trunk/AACCS/src/org/lichsword/android/model/activity/ButtonInfo.java
+END
+TitleBarModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/9/trunk/AACCS/src/org/lichsword/android/model/activity/TitleBarModel.java
+END
+ActivityModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/9/trunk/AACCS/src/org/lichsword/android/model/activity/ActivityModel.java
+END
+OptionMenuModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/9/trunk/AACCS/src/org/lichsword/android/model/activity/OptionMenuModel.java
+END

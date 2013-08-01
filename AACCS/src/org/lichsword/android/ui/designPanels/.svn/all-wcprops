@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/AACCS/src/org/lichsword/android/ui/designPanels
+END
+ButtonDesignPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/19/trunk/AACCS/src/org/lichsword/android/ui/designPanels/ButtonDesignPanel.java
+END
+ActivityDesignPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/18/trunk/AACCS/src/org/lichsword/android/ui/designPanels/ActivityDesignPanel.java
+END
+OptionMenuDesignPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/21/trunk/AACCS/src/org/lichsword/android/ui/designPanels/OptionMenuDesignPanel.java
+END
+FlowSheetDesignPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/20/trunk/AACCS/src/org/lichsword/android/ui/designPanels/FlowSheetDesignPanel.java
+END
+DatabaseDesignPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/18/trunk/AACCS/src/org/lichsword/android/ui/designPanels/DatabaseDesignPanel.java
+END
