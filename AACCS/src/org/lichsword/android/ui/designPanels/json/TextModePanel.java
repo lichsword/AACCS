@@ -23,6 +23,10 @@ public class TextModePanel extends JPanel {
 
     private JTextArea textArea;
 
+    public void setText(String text) {
+        textArea.setText(text);
+    }
+
     private void initContentView() {
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(new BorderLayout(0, 0));

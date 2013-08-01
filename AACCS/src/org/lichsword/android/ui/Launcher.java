@@ -67,6 +67,70 @@ public class Launcher extends JFrame {
         initContentView();
     }
 
+    private final String TAB_NAME_UI = "   UI   ";
+
+    /**
+     * "Database"
+     */
+    private final String TAB_NAME_DATABASE = "Database";
+
+    /**
+     * "Option Menu"
+     */
+    private final String TAB_NAME_OPTION_MENU = "Option Menu";
+
+    private final String TAB_NAME_BUTTON = "  Button  ";
+
+    private final String TAB_NAME_JSON = "  JSON    ";
+
+    private final String TAB_NAME_FLOW_SHEET = "Flow Sheet";
+
+    private final WindowListener mWindowListener = new WindowListener() {
+    
+        @Override
+        public void windowOpened(WindowEvent e) {
+            // TODO Auto-generated method stub
+    
+        }
+    
+        @Override
+        public void windowIconified(WindowEvent e) {
+            // TODO Auto-generated method stub
+    
+        }
+    
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+            // TODO Auto-generated method stub
+    
+        }
+    
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+            // TODO Auto-generated method stub
+    
+        }
+    
+        @Override
+        public void windowClosing(WindowEvent e) {
+            writeWindowConfigParam();
+        }
+    
+        @Override
+        public void windowClosed(WindowEvent e) {
+            // TODO Auto-generated method stub
+    
+        }
+    
+        @Override
+        public void windowActivated(WindowEvent e) {
+            // TODO Auto-generated method stub
+    
+        }
+    };
+
+    private JTabbedPane mTabs;
+
     private void initFrameParam() {
         setTitle(AppVersionManager.getInstance().getAppName());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,50 +156,6 @@ public class Launcher extends JFrame {
         addWindowListener(mWindowListener);
     }
 
-    private final WindowListener mWindowListener = new WindowListener() {
-
-        @Override
-        public void windowOpened(WindowEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void windowIconified(WindowEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void windowDeiconified(WindowEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void windowDeactivated(WindowEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-            writeWindowConfigParam();
-        }
-
-        @Override
-        public void windowClosed(WindowEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void windowActivated(WindowEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-    };
-
     private void writeWindowConfigParam() {
         Rectangle rect = Launcher.this.getBounds();
         ConfigManager manager = ConfigManager.getInstance();
@@ -146,28 +166,11 @@ public class Launcher extends JFrame {
         manager.setWindowTabIndex(mTabs.getSelectedIndex());
     }
 
-    private JTabbedPane mTabs;
-
     private void initContentView() {
         mTabs = new JTabbedPane(JTabbedPane.TOP);
         getContentPane().add(mTabs);
         initChildTab();
     }
-
-    /**
-     * "Database"
-     */
-    private final String TAB_NAME_DATABASE = "Database";
-    /**
-     * "Option Menu"
-     */
-    private final String TAB_NAME_OPTION_MENU = "Option Menu";
-
-    private final String TAB_NAME_BUTTON = "  Button  ";
-
-    private final String TAB_NAME_JSON = "  JSON    ";
-
-    private final String TAB_NAME_FLOW_SHEET = "Flow Sheet";
 
     private void initChildTab() {
         mTabs.addTab(TAB_NAME_UI, new ActivityDesignPanel());
@@ -183,7 +186,5 @@ public class Launcher extends JFrame {
         }// end if
         mTabs.setSelectedIndex(index);
     }
-
-    private final String TAB_NAME_UI = "   UI   ";
 
 }
