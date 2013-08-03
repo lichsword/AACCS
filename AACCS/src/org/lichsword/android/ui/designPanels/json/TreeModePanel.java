@@ -19,8 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lichsword.android.manager.ImageCachedManager;
-import org.lichsword.android.ui.designPanels.json.TreeModePanel.JSONNodeFactory.eJSONIcon;
-import org.lichsword.util.LogHelper;
+import org.lichsword.android.ui.designPanels.json.TreeModePanel.IconNode.eJSONType;
 
 public class TreeModePanel extends AbstractModelPanel {
     /**
@@ -61,74 +60,74 @@ public class TreeModePanel extends AbstractModelPanel {
                 final String childKeyString, final Object childValueObject) {
             try {
                 if (childValueObject instanceof Integer) {
-                    IconNode node = factory.createNode(eJSONIcon.INT,
-                            childKeyString + ":" + childValueObject);
+                    IconNode node = factory.createNode(eJSONType.INT,
+                            childKeyString, "" + childValueObject);
                     parentNode.add(node);
                 } else if (childValueObject instanceof String) {
                     String valueString = (String) childValueObject;
                     if (isJsonArray(valueString)) {
-                        IconNode node = factory.createNode(eJSONIcon.ARRAY,
-                                childKeyString);
+                        IconNode node = factory.createNode(eJSONType.ARRAY,
+                                childKeyString, "");
                         parentNode.add(node);
                         // handler child
                         JSONArray array = new JSONArray(valueString);
                         if (null != array) {
-                            LogHelper.d("array: " + array);
+                            // LogHelper.d("array: " + array);
                             for (int i = 0; i < array.length(); i++) {
                                 parseJSONAsTree(node, "" + i,
                                         array.getString(i));
                             }// end for
                         }
                     } else if (isJsonObject(valueString)) {
-                        IconNode node = factory.createNode(eJSONIcon.OBJECT,
-                                childKeyString);
+                        IconNode node = factory.createNode(eJSONType.OBJECT,
+                                childKeyString, "");
                         parentNode.add(node);
                         // handler child
                         JSONObject object = new JSONObject(valueString);
                         if (null != object) {
-                            LogHelper.d("object: " + object);
+                            // LogHelper.d("object: " + object);
                             @SuppressWarnings("unchecked")
                             Iterator<String> keys = object.keys();
                             while (keys.hasNext()) {
                                 String key = keys.next().toString();
                                 Object value = object.get(key);
-                                LogHelper
-                                        .d("key: " + key + ", value: " + value);
+                                // LogHelper
+                                // .d("key: " + key + ", value: " + value);
                                 parseJSONAsTree(node, key, value);
                             }
                         }
                     } else {
                         // LogHelper.e("illegal json: ");
-                        IconNode node = factory.createNode(eJSONIcon.STRING,
-                                childKeyString + ":" + valueString);
+                        IconNode node = factory.createNode(eJSONType.STRING,
+                                childKeyString, valueString);
                         parentNode.add(node);
                     }
                 } else if (childValueObject instanceof JSONArray) {
-                    IconNode node = factory.createNode(eJSONIcon.ARRAY,
-                            childKeyString);
+                    IconNode node = factory.createNode(eJSONType.ARRAY,
+                            childKeyString, "");
                     parentNode.add(node);
                     // handler child
                     JSONArray array = (JSONArray) childValueObject;
                     if (null != array) {
-                        LogHelper.d("array: " + array);
+                        // LogHelper.d("array: " + array);
                         for (int i = 0; i < array.length(); i++) {
                             parseJSONAsTree(node, "" + i, array.getString(i));
                         }// end for
                     }
                 } else if (childValueObject instanceof JSONObject) {
-                    IconNode node = factory.createNode(eJSONIcon.OBJECT,
-                            childKeyString);
+                    IconNode node = factory.createNode(eJSONType.OBJECT,
+                            childKeyString, "");
                     parentNode.add(node);
                     // handler child
                     JSONObject object = (JSONObject) childValueObject;
                     if (null != object) {
-                        LogHelper.d("object: " + object);
+                        // LogHelper.d("object: " + object);
                         @SuppressWarnings("unchecked")
                         Iterator<String> keys = object.keys();
                         while (keys.hasNext()) {
                             String key = keys.next().toString();
                             Object value = object.get(key);
-                            LogHelper.d("key: " + key + ", value: " + value);
+                            // LogHelper.d("key: " + key + ", value: " + value);
                             parseJSONAsTree(node, key, value);
                         }
                     }
@@ -142,6 +141,12 @@ public class TreeModePanel extends AbstractModelPanel {
         }
     }
 
+    /***
+     * Tree render
+     * 
+     * @author lichsword
+     * 
+     */
     class IconCellRender extends DefaultTreeCellRenderer {
 
         private static final long serialVersionUID = 1L;
@@ -155,7 +160,7 @@ public class TreeModePanel extends AbstractModelPanel {
                     leaf, row, hasFocus);
             IconNode node = (IconNode) value;
             Icon icon = node.icon;
-            String text = node.text;
+            String text = node.toString();
 
             setIcon(icon);
             setText(text);
@@ -191,24 +196,20 @@ public class TreeModePanel extends AbstractModelPanel {
             return sInstance;
         }
 
-        public static enum eJSONIcon {
-            ARRAY, OBJECT, INT, STRING
-        }
-
-        IconNode createNode(eJSONIcon icon, String text) {
+        IconNode createNode(eJSONType icon, String key, String value) {
             IconNode result = null;
             switch (icon) {
             case ARRAY:
-                result = new IconNode(arrayIcon, text);
+                result = new IconNode(arrayIcon, key, value);
                 break;
             case OBJECT:
-                result = new IconNode(objectIcon, text);
+                result = new IconNode(objectIcon, key, value);
                 break;
             case INT:
-                result = new IconNode(integerIcon, text);
+                result = new IconNode(integerIcon, key, value);
                 break;
             case STRING:
-                result = new IconNode(stringIcon, text);
+                result = new IconNode(stringIcon, key, value);
                 break;
             default:
                 break;
@@ -222,21 +223,34 @@ public class TreeModePanel extends AbstractModelPanel {
 
         private static final long serialVersionUID = 1L;
 
+        public static enum eJSONType {
+            ARRAY, OBJECT, INT, STRING
+        }
+
+        eJSONType type;
         Icon icon;
-        String text;
+        String key;
+        String value;
 
         IconNode() {
             // do nothing
         }
 
-        IconNode(Icon icon, String text) {
+        IconNode(Icon icon, String key, String value) {
             this.icon = icon;
-            this.text = text;
+            this.key = key;
+            this.value = value;
         }
 
-        IconNode(ImageIcon imageIcon, String text) {
+        IconNode(ImageIcon imageIcon, String key, String value) {
             this.icon = imageIcon;
-            this.text = text;
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return key + ":" + value;
         }
 
     }
@@ -248,13 +262,21 @@ public class TreeModePanel extends AbstractModelPanel {
         thread.start();
     }
 
+    /**
+     * 
+     * @return null if not exist root.
+     */
+    public IconNode getRootNode() {
+        return rootNode;
+    }
+
     private void initContentView() {
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(new BorderLayout(0, 0));
 
         /* scroll pane contain an TextArea */
-        rootNode = JSONNodeFactory.getInstance().createNode(eJSONIcon.OBJECT,
-                "ROOT");
+        rootNode = JSONNodeFactory.getInstance().createNode(eJSONType.OBJECT,
+                "ROOT", "");
         tree = new JTree(rootNode);
         tree.setCellRenderer(new IconCellRender());/* set cell render */
         tree.setEditable(false);/* can't edit */
@@ -275,18 +297,7 @@ public class TreeModePanel extends AbstractModelPanel {
     }
 
     private void initContentData() {
-        // TODO Auto-generated method stub
-        JSONNodeFactory factory = JSONNodeFactory.getInstance();
-        IconNode root1 = factory.createNode(eJSONIcon.ARRAY, "node 1");
-        IconNode root2 = factory.createNode(eJSONIcon.OBJECT, "node 2");
-        IconNode root3 = factory.createNode(eJSONIcon.INT, "node 3");
-        IconNode root4 = factory.createNode(eJSONIcon.STRING, "node 4");
-        root1.add(root2);
-        root2.add(root3);
-        root2.add(root4);
-        rootNode.add(root1);
-        /* must invoke repaint, otherwise the UI is dirty data. */
-        // tree.repaint();
+        // do nothing
     }
 
     private boolean isJsonArray(String text) {
@@ -309,6 +320,7 @@ public class TreeModePanel extends AbstractModelPanel {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     private void expandAll(JTree tree, TreePath parent, boolean expand) {
         TreeNode node = (TreeNode) parent.getLastPathComponent();
         if (node.getChildCount() >= 0) {
@@ -317,7 +329,8 @@ public class TreeModePanel extends AbstractModelPanel {
                 TreePath path = parent.pathByAddingChild(n);
                 expandAll(tree, path, expand);
             }
-        }
+        }// end if
+
         if (expand) {
             tree.expandPath(parent);
         } else {

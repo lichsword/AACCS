@@ -12,8 +12,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.lichsword.android.ui.designPanels.json.TreeModePanel.IconNode;
 import org.lichsword.service.json.JsonClientService;
 
+/**
+ * <p>
+ * JSONDesignPanel is the data center, the TextModePanel, CodeModePanel,
+ * TreeModePanel are the branches of center, to divider difference UI work.
+ * </p>
+ * 
+ * @author lichsword
+ * 
+ */
 public class JSONDesignPanel extends JPanel {
 
     /**
@@ -76,6 +86,12 @@ public class JSONDesignPanel extends JPanel {
             JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
             currentModelPanel = (AbstractModelPanel) tabbedPane
                     .getSelectedComponent();
+            if (currentModelPanel instanceof CodeModePanel) {
+                CodeModePanel codeModePanel = (CodeModePanel) currentModelPanel;
+                /* get root node from tree */
+                IconNode rootNode = treeModePanel.getRootNode();
+                codeModePanel.setData(rootNode);
+            }// end if
         }
     }
 
