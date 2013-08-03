@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.lichsword.android.manager.ImageCachedManager;
 import org.lichsword.android.ui.designPanels.json.TreeModePanel.IconNode.eJSONType;
+import org.lichsword.util.TextUtils;
 
 public class TreeModePanel extends AbstractModelPanel {
     /**
@@ -196,24 +197,8 @@ public class TreeModePanel extends AbstractModelPanel {
             return sInstance;
         }
 
-        IconNode createNode(eJSONType icon, String key, String value) {
-            IconNode result = null;
-            switch (icon) {
-            case ARRAY:
-                result = new IconNode(arrayIcon, key, value);
-                break;
-            case OBJECT:
-                result = new IconNode(objectIcon, key, value);
-                break;
-            case INT:
-                result = new IconNode(integerIcon, key, value);
-                break;
-            case STRING:
-                result = new IconNode(stringIcon, key, value);
-                break;
-            default:
-                break;
-            }
+        IconNode createNode(eJSONType type, String key, String value) {
+            IconNode result = new IconNode(type, key, value);
             return result;
         }
 
@@ -236,21 +221,36 @@ public class TreeModePanel extends AbstractModelPanel {
             // do nothing
         }
 
-        IconNode(Icon icon, String key, String value) {
-            this.icon = icon;
-            this.key = key;
-            this.value = value;
-        }
-
-        IconNode(ImageIcon imageIcon, String key, String value) {
-            this.icon = imageIcon;
+        IconNode(eJSONType type, String key, String value) {
+            this.type = type;
+            JSONNodeFactory factory = JSONNodeFactory.getInstance();
+            switch (type) {
+            case ARRAY:
+                icon = factory.arrayIcon;
+                break;
+            case INT:
+                icon = factory.integerIcon;
+                break;
+            case STRING:
+                icon = factory.stringIcon;
+                break;
+            case OBJECT:
+                icon = factory.objectIcon;
+                break;
+            default:
+                break;
+            }
             this.key = key;
             this.value = value;
         }
 
         @Override
         public String toString() {
-            return key + ":" + value;
+            if (TextUtils.isEmpty(value)) {
+                return key;
+            } else {
+                return key + ":" + value;
+            }
         }
 
     }

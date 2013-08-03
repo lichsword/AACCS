@@ -71,8 +71,21 @@ public class CodeModePanel extends AbstractModelPanel {
             }// end if
 
             sb.append(rootNode.toString());
-
             // TODO
+            if (rootNode.isRoot()) {
+                switch (rootNode.type) {
+                case INT:
+                    sb.append("private int " + rootNode.key);
+                    break;
+                case STRING:
+                    sb.append("private String " + rootNode.key);
+                    break;
+                default:
+                    break;
+                }
+            } else {
+                // new class
+            }
 
             return sb.toString();
         }
