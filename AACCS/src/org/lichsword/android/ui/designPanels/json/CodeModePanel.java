@@ -57,37 +57,37 @@ public class CodeModePanel extends AbstractModelPanel {
         @Override
         public void run() {
             if (null != rootNode) {
-                String text = translateCode(rootNode);
+                StringBuilder sb = new StringBuilder();
+                generateCodeByClassNode(sb, rootNode);
+                String text = sb.toString();
                 textArea.setText(text);
             }// end if
             super.run();
         }
 
-        String translateCode(IconNode rootNode) {
-            StringBuilder sb = new StringBuilder();
+        void generateCodeByClassNode(StringBuilder sb, IconNode node) {
 
-            if (null != rootNode) {
-                sb.append("root node is null.");
-            }// end if
-
-            sb.append(rootNode.toString());
-            // TODO
-            if (rootNode.isRoot()) {
-                switch (rootNode.type) {
-                case INT:
-                    sb.append("private int " + rootNode.key);
-                    break;
-                case STRING:
-                    sb.append("private String " + rootNode.key);
-                    break;
-                default:
-                    break;
-                }
-            } else {
-                // new class
+            switch (node.type) {
+            case OBJECT:
+                sb.append("class " + node.key + " {\n");
+                IconNode next = (IconNode) node.getNextNode();
+                generateCodeByClassNode(sb, next);
+                break;
+            case ARRAY:
+                sb.append("    private Arraylist<" + node.key + ">" + node.key
+                        + "List = null;");
+                break;
+            case INT:
+                sb.append("    private int " + node.key + ";");
+                break;
+            case STRING:
+                sb.append("    private String " + node.key + ";");
+                break;
+            default:
+                break;
             }
+            sb.append("}");
 
-            return sb.toString();
         }
 
     }

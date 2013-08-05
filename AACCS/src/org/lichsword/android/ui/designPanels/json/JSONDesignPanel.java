@@ -104,6 +104,8 @@ public class JSONDesignPanel extends JPanel {
         panel.setLayout(new BorderLayout(0, 0));
         textField = new JTextField();
         textField.setColumns(10);
+        textField
+                .setText("http://localhost/project/sharefile/android_version.json");
         panel.add(textField, BorderLayout.CENTER);
 
         JButton btnRun = new JButton();
