@@ -30,7 +30,9 @@ import org.lichsword.android.ui.designPanels.ButtonDesignPanel;
 import org.lichsword.android.ui.designPanels.DatabaseDesignPanel;
 import org.lichsword.android.ui.designPanels.FlowSheetDesignPanel;
 import org.lichsword.android.ui.designPanels.OptionMenuDesignPanel;
+import org.lichsword.android.ui.designPanels.game.TLBBWG;
 import org.lichsword.android.ui.designPanels.json.JSONDesignPanel;
+import org.lichsword.android.ui.designPanels.ps.PhotoshopPanel;
 
 /**
  * @author yuewang
@@ -85,47 +87,51 @@ public class Launcher extends JFrame {
 
     private final String TAB_NAME_FLOW_SHEET = "Flow Sheet";
 
+    private final String TAB_PHOTO_SHOP = "Photoshop";
+
+    private final String TAB_NAME_TLBB_WG = "天龙八部游戏外挂";
+
     private final WindowListener mWindowListener = new WindowListener() {
-    
+
         @Override
         public void windowOpened(WindowEvent e) {
             // TODO Auto-generated method stub
-    
+
         }
-    
+
         @Override
         public void windowIconified(WindowEvent e) {
             // TODO Auto-generated method stub
-    
+
         }
-    
+
         @Override
         public void windowDeiconified(WindowEvent e) {
             // TODO Auto-generated method stub
-    
+
         }
-    
+
         @Override
         public void windowDeactivated(WindowEvent e) {
             // TODO Auto-generated method stub
-    
+
         }
-    
+
         @Override
         public void windowClosing(WindowEvent e) {
             writeWindowConfigParam();
         }
-    
+
         @Override
         public void windowClosed(WindowEvent e) {
             // TODO Auto-generated method stub
-    
+
         }
-    
+
         @Override
         public void windowActivated(WindowEvent e) {
             // TODO Auto-generated method stub
-    
+
         }
     };
 
@@ -179,6 +185,8 @@ public class Launcher extends JFrame {
         mTabs.addTab(TAB_NAME_BUTTON, new ButtonDesignPanel());
         mTabs.addTab(TAB_NAME_JSON, new JSONDesignPanel());
         mTabs.addTab(TAB_NAME_FLOW_SHEET, new FlowSheetDesignPanel());
+        mTabs.addTab(TAB_PHOTO_SHOP, new PhotoshopPanel());
+        mTabs.addTab(TAB_NAME_TLBB_WG, new TLBBWG());
 
         int index = ConfigManager.getInstance().getWindowTabIndex(0);
         if (index >= mTabs.getTabCount()) {
