@@ -27,77 +27,77 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * @author yuewang
- * 
+ * @author wangyue.wy
+ * @data 2013-12-3
  */
 public class DOMParseHandler {
 
-	private final String PREPARED_LINE_1 = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-	private final String PREPARED_LINE_2 = "<preference>";
-	private final String PREPARED_LINE_3 = "</preference>";
+    private final String PREPARED_LINE_1 = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+    private final String PREPARED_LINE_2 = "<preference>";
+    private final String PREPARED_LINE_3 = "</preference>";
 
-	private void ensureFile(File file) {
-		FileOutputStream fos;
-		StringBuilder sb = new StringBuilder();
-		sb.append(PREPARED_LINE_1);
-		sb.append('\n');
-		sb.append(PREPARED_LINE_2);
-		sb.append('\n');
-		sb.append(PREPARED_LINE_3);
-		try {
-			fos = new FileOutputStream(file);
-			fos.write(sb.toString().getBytes());
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    private void ensureFile(File file) {
+        FileOutputStream fos;
+        StringBuilder sb = new StringBuilder();
+        sb.append(PREPARED_LINE_1);
+        sb.append('\n');
+        sb.append(PREPARED_LINE_2);
+        sb.append('\n');
+        sb.append(PREPARED_LINE_3);
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(sb.toString().getBytes());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	protected Document parseXMLFile(File file) {
+    protected Document parseXMLFile(File file) {
 
-		Document result = null;
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		if (null != file) {
-			if (!file.exists()) {
-				System.out.println("Detected Param File not exist...");
-				ensureFile(file);
-				System.out.println("Create file " + file.getAbsolutePath());
-			}// end if
-			try {
-				builder = factory.newDocumentBuilder();
-				result = builder.parse(file);
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Param file should not be null...ERROR!");
-		}
+        Document result = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        if (null != file) {
+            if (!file.exists()) {
+                System.out.println("Detected Param File not exist...");
+                ensureFile(file);
+                System.out.println("Create file " + file.getAbsolutePath());
+            }// end if
+            try {
+                builder = factory.newDocumentBuilder();
+                result = builder.parse(file);
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Param file should not be null...ERROR!");
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	protected Document parseXMLFile(InputStream inputStream) {
-		Document result = null;
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		try {
-			builder = factory.newDocumentBuilder();
-			result = builder.parse(inputStream);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+    protected Document parseXMLFile(InputStream inputStream) {
+        Document result = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+            result = builder.parse(inputStream);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
