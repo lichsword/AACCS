@@ -18,6 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.at.common.http.ATHttpClient;
+import com.at.common.http.ATHttpResponse;
+
 public class HttpUtil {
 
 	public static URL getURL(String url) {
@@ -45,23 +48,14 @@ public class HttpUtil {
 	}
 
 	public static String getSourceCode(String url) {
-		StringBuilder sb = new StringBuilder();
-
-		URL myUrl = getURL(url);
-		HttpURLConnection connection;
-		BufferedReader reader;
+		ATHttpClient client = new ATHttpClient();
+		ATHttpResponse response;
 		try {
-			connection = (HttpURLConnection) myUrl.openConnection();
-			reader = new BufferedReader(new InputStreamReader(connection
-					.getInputStream()));
-			String line;
-			while (null != (line = reader.readLine())) {
-				sb.append(line);
-			}
-		} catch (IOException e) {
+			response = client.get(url);
+			return response.asString();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return sb.toString();
+		return "{}";
 	}
 }
